@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'nu.studer.jooq' version '8.2'
 }
 
 group = 'cs.utdallas.edu.app'
@@ -10,8 +11,44 @@ repositories {
 }
 
 dependencies {
+    // JUnit
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    // jOOQ
+    implementation 'org.jooq:jooq:3.18.3'
+    implementation 'org.jooq:jooq-meta:3.18.3'
+    implementation 'org.jooq:jooq-codegen:3.18.3'
+
+    // MySQL
+    implementation 'com.mysql:mysql-connector-j:8.0.32'
+    jooqGenerator 'com.mysql:mysql-connector-j:8.0.32'
+}
+
+jooq {
+    configurations {
+        main {
+            generationTool {
+                jdbc {
+                    driver = 'com.mysql.cj.jdbc.Driver'
+                    url = 'jdbc:mysql://localhost:3306/AirbornePollutantPathfinder'
+                    user = 'root'
+                    password = 'password'
+                }
+                generator {
+                    name = 'org.jooq.codegen.DefaultGenerator'
+                    database {
+                        name = 'org.jooq.meta.mysql.MySQLDatabase'
+                        inputSchema = 'AirbornePollutantPathfinder'
+                    }
+                    target {
+                        packageName = 'cs.utdallas.edu.app.database.generated'
+                    }
+                    strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+                }
+            }
+        }
+    }
 }
 
 test {
