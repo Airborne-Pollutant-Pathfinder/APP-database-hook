@@ -28,6 +28,9 @@ public final class FetchDataTask implements Runnable {
             tx.commit();
 
             for (Sensor sensor : sensors) {
+                /* todo in the future, if this solution is not scalable, a queued approach will need to be used, where
+                   we enqueue all these fetch data requests to a separate thread and execute there. If that is still
+                   not enough, a multi-threaded approach would need to be used to handle the queue concurrently. */
                 for (PollutantType pollutant : apiRepository.getSupportedPollutants()) {
                     apiRepository.getClients(pollutant).forEach(client -> {
                         try {
