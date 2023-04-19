@@ -2,11 +2,8 @@ package cs.utdallas.edu.app.database;
 
 import cs.utdallas.edu.app.database.api.APIRepository;
 import cs.utdallas.edu.app.database.api.openaq.OpenAQAPIClient;
-import cs.utdallas.edu.app.database.table.Sensor;
-import org.hibernate.*;
-import spark.Spark;
+import org.hibernate.SessionFactory;
 
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -21,9 +18,6 @@ public class Main {
         APIRepository apiRepository = APIRepository.builder()
                 .registerAllSupportedPollutants(new OpenAQAPIClient())
                 .build();
-
-        // Start webhook
-        Spark.port(8080);
 
         // Start fetch data task
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);

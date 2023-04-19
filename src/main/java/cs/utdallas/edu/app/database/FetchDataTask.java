@@ -9,10 +9,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import spark.Spark;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -66,19 +63,6 @@ public final class FetchDataTask implements Runnable {
                     });
                 }
             }
-
-            // Send webhook
-            String sensorIds = String.join(",", updatedSensorIds.stream().map(Object::toString).toArray(String[]::new));
-            String message = String.format("Database updated for sensors %s", sensorIds);
-            String encodedMessage = URLEncoder.encode(message, StandardCharsets.UTF_8);
-            Spark.post("/webhook", (req, res) -> {
-                String secret = req.headers("X-Webhook-Secret");
-                if (!webhookSecret.equals(secret)) {
-                    res.status(401);
-                    return "Unauthorized";
-                }
-                return encodedMessage;
-            });
 
             System.out.println("Fetched " + total + " pollutants for " + updatedSensorIds.size() + " sensors.");
             lastRun = System.currentTimeMillis();
