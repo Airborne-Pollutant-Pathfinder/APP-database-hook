@@ -1,17 +1,10 @@
 package cs.utdallas.edu.app.database;
 
-import cs.utdallas.edu.app.database.api.APIClient;
 import cs.utdallas.edu.app.database.api.APIRepository;
-import cs.utdallas.edu.app.database.api.APIRepositoryImpl;
 import cs.utdallas.edu.app.database.api.BreezometerAPIClient;
-import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
-import org.jooq.impl.DefaultConfiguration;
+import cs.utdallas.edu.app.database.data.SensorTable;
+import org.hibernate.*;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -23,9 +16,10 @@ public class Main {
         String dbUsername = System.getenv("APP_DB_USERNAME");
         String dbPassword = System.getenv("APP_DB_PASSWORD");
 
+        SessionFactory factory = SessionFactoryMaker.getFactory();
+
         try {
-            Connection connection = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
-            DSLContext dsl = DSL.using(connection);
+            Session session = factory.openSession();
 
             // Initialize API clients
             APIRepository apiRepository = APIRepository.builder()
@@ -34,9 +28,9 @@ public class Main {
 
             // Start fetch data task
             ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-            executor.scheduleAtFixedRate(new FetchDataTask(dsl, apiRepository), 0, 5, TimeUnit.MINUTES);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            executor.scheduleAtFixedRate(new FetchDataTask(session, apiRepository), 0, 5, TimeUnit.MINUTES);
+        } catch (HibernateException e) {
+            e.printStackTrace();
         }
     }
 }

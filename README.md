@@ -1,15 +1,13 @@
 # APP-database-hook
 
 This database hook is responsible for fetching data from 3rd party APIs. It also provides a webhook for an application
-to attach listeners to, so they can receive updates when new data is available. It uses jOOQ and Spark.
+to attach listeners to, so they can receive updates when new data is available. It uses Hibernate and Spark.
 
 ## Setup
 
 1. The database must first be loaded before running the database hook. More instructions can be found 
    [here](https://github.com/Airborne-Pollutant-Pathfinder/APP-database).
-2. Generate the classes from jOOQ by running `./gradlew generateJooq`. The generated classes will appear at 
-   `build/generated-src/jooq`.
-3. Add the `APP_DB_URL`, `APP_DB_USERNAME`, and `APP_DB_PASSWORD` environment variables. IntelliJ has native support for 
+2. Add the `APP_DB_URL`, `APP_DB_USERNAME`, and `APP_DB_PASSWORD` environment variables. IntelliJ has native support for 
    this if you edit the configuration settings. More detailed information on how to add environment variables to your 
    IntelliJ run configurations can be found 
    [here](https://www.jetbrains.com/help/objc/add-environment-variables-and-program-arguments.html#add-environment-variables).

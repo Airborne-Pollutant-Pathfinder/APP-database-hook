@@ -1,17 +1,18 @@
 package cs.utdallas.edu.app.database;
 
 import cs.utdallas.edu.app.database.api.APIRepository;
-import cs.utdallas.edu.app.database.generated.tables.Sensors;
-import cs.utdallas.edu.app.database.generated.tables.records.SensorsRecord;
-import org.jooq.DSLContext;
-import org.jooq.Result;
+import cs.utdallas.edu.app.database.data.SensorTable;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import java.util.List;
 
 public final class FetchDataTask implements Runnable {
-    private final DSLContext dsl;
+    private final Session session;
     private final APIRepository apiRepository;
 
-    public FetchDataTask(DSLContext dsl, APIRepository apiRepository) {
-        this.dsl = dsl;
+    public FetchDataTask(Session session, APIRepository apiRepository) {
+        this.session = session;
         this.apiRepository = apiRepository;
     }
 
@@ -19,11 +20,11 @@ public final class FetchDataTask implements Runnable {
     public void run() {
         System.out.println("Hello, world!");
 
-        dsl.selectOne().fetch();
-        System.out.println("Connected to database");
-
-        // ERROR: The below line causes the application to pause. This could be because jOOQ doesn't support Spatial Data Types.
-        dsl.selectFrom(Sensors.SENSORS).forEach(System.out::println);
+        Transaction tx = session.beginTransaction();
+        List<SensorTable> sensors = session.createQuery("SELECT s FROM SensorTable s", SensorTable.class)
+                .list();
+        tx.commit();
+        System.out.println(sensors);
 
         System.out.println("Finished");
     }
