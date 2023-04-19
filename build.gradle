@@ -20,6 +20,12 @@ dependencies {
 
     // MySQL
     implementation 'com.mysql:mysql-connector-j:8.0.32'
+
+    // OkHttp
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+
+    // Gson
+    implementation 'com.google.code.gson:gson:2.10.1'
 }
 
 test {

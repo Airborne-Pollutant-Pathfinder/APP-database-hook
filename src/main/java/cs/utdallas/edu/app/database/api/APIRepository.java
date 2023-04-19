@@ -8,4 +8,6 @@ public interface APIRepository {
     }
 
     Collection<APIClient> getClients(String pollutant);
+
+    Collection<String> getSupportedPollutants();
 }

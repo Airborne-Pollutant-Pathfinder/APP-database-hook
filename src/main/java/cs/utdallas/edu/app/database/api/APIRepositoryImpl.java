@@ -13,4 +13,9 @@ public final class APIRepositoryImpl implements APIRepository {
     public Collection<APIClient> getClients(String pollutant) {
         return apiClientsForPollutant.getOrDefault(pollutant, Collections.emptyList());
     }
+
+    @Override
+    public Collection<String> getSupportedPollutants() {
+        return apiClientsForPollutant.keySet();
+    }
 }
