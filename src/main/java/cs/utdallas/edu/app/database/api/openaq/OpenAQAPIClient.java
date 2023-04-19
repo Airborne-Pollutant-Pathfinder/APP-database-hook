@@ -1,6 +1,7 @@
 package cs.utdallas.edu.app.database.api.openaq;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import cs.utdallas.edu.app.database.PollutantType;
 import cs.utdallas.edu.app.database.api.APIClient;
 import cs.utdallas.edu.app.database.api.APISource;
@@ -18,7 +19,7 @@ import static cs.utdallas.edu.app.database.PollutantType.*;
 
 public final class OpenAQAPIClient implements APIClient {
     @Override
-    public void fetchData(long since, Sensor sensor, String pollutant) throws IOException {
+    public void fetchData(long since, Sensor sensor, PollutantType pollutant) throws IOException {
         if (sensor.getSource() != APISource.OPENAQ) {
             return;
         }
@@ -29,26 +30,26 @@ public final class OpenAQAPIClient implements APIClient {
         Request request = new Request.Builder().url(url).build();
         try (Response response = client.newCall(request).execute()) {
             String jsonResponse = response.body().string();
-            System.out.println(jsonResponse);
-
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(OpenAQParameter.class, new OpenAQParameterDeserializer())
+                    .create();
             OpenAQResponse openAQResponse = gson.fromJson(jsonResponse, OpenAQResponse.class);
             OpenAQResult result = openAQResponse.getResults()[0];
-            OpenAQParameter pm25 = null;
+            OpenAQParameter parameter = null;
             for (OpenAQParameter measurement : result.getParameters()) {
-                if (measurement.getParameter().equals("pm25")) {
-                    pm25 = measurement;
+                if (pollutant == measurement.getPollutantType()) {
+                    parameter = measurement;
                     break;
                 }
             }
 
-            if (pm25 != null) {
-                double pm25Value = pm25.getCount();
-                String unit = pm25.getUnit();
-                String lastUpdated = pm25.getLastUpdated();
+            if (parameter != null) {
+                double value = parameter.getLastValue();
+                String unit = parameter.getUnit();
+                String lastUpdated = parameter.getLastUpdated();
                 System.out.printf(
-                        "Latest PM2.5 readings for location %s: %f %s (%s)\n",
-                        sensor.getSourceId(), pm25Value, unit, lastUpdated);
+                        "Latest " + pollutant + " readings for location %s: %f %s (%s)\n",
+                        sensor.getSourceId(), value, unit, lastUpdated);
             }
         }
     }

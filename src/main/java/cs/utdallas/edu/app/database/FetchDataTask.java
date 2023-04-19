@@ -28,7 +28,7 @@ public final class FetchDataTask implements Runnable {
             tx.commit();
 
             for (Sensor sensor : sensors) {
-                for (String pollutant : apiRepository.getSupportedPollutants()) {
+                for (PollutantType pollutant : apiRepository.getSupportedPollutants()) {
                     apiRepository.getClients(pollutant).forEach(client -> {
                         try {
                             client.fetchData(lastRun, sensor, pollutant);

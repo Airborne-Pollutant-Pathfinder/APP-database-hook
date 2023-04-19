@@ -1,5 +1,7 @@
 package cs.utdallas.edu.app.database.api;
 
+import cs.utdallas.edu.app.database.PollutantType;
+
 import java.util.Collection;
 
 public interface APIRepository {
@@ -7,7 +9,7 @@ public interface APIRepository {
         return new APIRepositoryBuilder();
     }
 
-    Collection<APIClient> getClients(String pollutant);
+    Collection<APIClient> getClients(PollutantType pollutant);
 
-    Collection<String> getSupportedPollutants();
+    Collection<PollutantType> getSupportedPollutants();
 }

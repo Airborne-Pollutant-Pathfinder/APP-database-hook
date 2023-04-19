@@ -9,5 +9,5 @@ import java.util.Collection;
 public interface APIClient {
     Collection<PollutantType> getSupportedPollutants();
 
-    void fetchData(long since, Sensor sensor, String pollutant) throws IOException;
+    void fetchData(long since, Sensor sensor, PollutantType pollutant) throws IOException;
 }

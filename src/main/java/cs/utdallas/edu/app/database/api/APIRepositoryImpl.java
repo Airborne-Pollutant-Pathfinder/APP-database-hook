@@ -1,21 +1,23 @@
 package cs.utdallas.edu.app.database.api;
 
+import cs.utdallas.edu.app.database.PollutantType;
+
 import java.util.*;
 
 public final class APIRepositoryImpl implements APIRepository {
-    private final Map<String, Collection<APIClient>> apiClientsForPollutant;
+    private final Map<PollutantType, Collection<APIClient>> apiClientsForPollutant;
 
-    public APIRepositoryImpl(Map<String, Collection<APIClient>> apiClientsForPollutant) {
+    public APIRepositoryImpl(Map<PollutantType, Collection<APIClient>> apiClientsForPollutant) {
         this.apiClientsForPollutant = apiClientsForPollutant;
     }
 
     @Override
-    public Collection<APIClient> getClients(String pollutant) {
+    public Collection<APIClient> getClients(PollutantType pollutant) {
         return apiClientsForPollutant.getOrDefault(pollutant, Collections.emptyList());
     }
 
     @Override
-    public Collection<String> getSupportedPollutants() {
+    public Collection<PollutantType> getSupportedPollutants() {
         return apiClientsForPollutant.keySet();
     }
 }
