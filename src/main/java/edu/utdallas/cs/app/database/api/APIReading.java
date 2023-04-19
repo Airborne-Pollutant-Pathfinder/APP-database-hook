@@ -1,6 +1,6 @@
-package cs.utdallas.edu.app.database.api;
+package edu.utdallas.cs.app.database.api;
 
-import cs.utdallas.edu.app.database.PollutantType;
+import edu.utdallas.cs.app.database.PollutantType;
 
 import java.util.Date;
 

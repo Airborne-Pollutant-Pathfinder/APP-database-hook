@@ -1,6 +1,6 @@
-package cs.utdallas.edu.app.database.api.openaq;
+package edu.utdallas.cs.app.database.api.openaq;
 
-import cs.utdallas.edu.app.database.PollutantType;
+import edu.utdallas.cs.app.database.PollutantType;
 
 public class OpenAQParameter {
     private transient PollutantType pollutantType;

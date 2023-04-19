@@ -1,4 +1,4 @@
-package cs.utdallas.edu.app.database;
+package edu.utdallas.cs.app.database;
 
 public enum PollutantType {
     CO(1),

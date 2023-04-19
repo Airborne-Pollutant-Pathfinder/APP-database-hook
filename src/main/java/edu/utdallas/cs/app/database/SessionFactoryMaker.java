@@ -1,8 +1,8 @@
-package cs.utdallas.edu.app.database;
+package edu.utdallas.cs.app.database;
 
-import cs.utdallas.edu.app.database.table.CapturedPollutant;
-import cs.utdallas.edu.app.database.table.Pollutant;
-import cs.utdallas.edu.app.database.table.Sensor;
+import edu.utdallas.cs.app.database.table.CapturedPollutant;
+import edu.utdallas.cs.app.database.table.Pollutant;
+import edu.utdallas.cs.app.database.table.Sensor;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 

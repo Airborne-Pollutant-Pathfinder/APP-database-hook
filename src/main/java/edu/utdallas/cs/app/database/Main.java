@@ -1,7 +1,7 @@
-package cs.utdallas.edu.app.database;
+package edu.utdallas.cs.app.database;
 
-import cs.utdallas.edu.app.database.api.APIRepository;
-import cs.utdallas.edu.app.database.api.openaq.OpenAQAPIClient;
+import edu.utdallas.cs.app.database.api.APIRepository;
+import edu.utdallas.cs.app.database.api.openaq.OpenAQAPIClient;
 import org.hibernate.SessionFactory;
 
 import java.util.concurrent.Executors;

@@ -1,8 +1,11 @@
-package cs.utdallas.edu.app.database.api;
+package edu.utdallas.cs.app.database.api;
 
-import cs.utdallas.edu.app.database.PollutantType;
+import edu.utdallas.cs.app.database.PollutantType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class APIRepositoryBuilder {
     private final Map<PollutantType, Collection<APIClient>> apiClientsForPollutant = new HashMap<>();

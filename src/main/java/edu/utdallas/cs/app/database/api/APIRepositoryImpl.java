@@ -1,8 +1,10 @@
-package cs.utdallas.edu.app.database.api;
+package edu.utdallas.cs.app.database.api;
 
-import cs.utdallas.edu.app.database.PollutantType;
+import edu.utdallas.cs.app.database.PollutantType;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 public final class APIRepositoryImpl implements APIRepository {
     private final Map<PollutantType, Collection<APIClient>> apiClientsForPollutant;

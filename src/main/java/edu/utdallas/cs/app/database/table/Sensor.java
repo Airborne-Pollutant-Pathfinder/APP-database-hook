@@ -1,6 +1,6 @@
-package cs.utdallas.edu.app.database.table;
+package edu.utdallas.cs.app.database.table;
 
-import cs.utdallas.edu.app.database.api.APISource;
+import edu.utdallas.cs.app.database.api.APISource;
 import jakarta.persistence.*;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;

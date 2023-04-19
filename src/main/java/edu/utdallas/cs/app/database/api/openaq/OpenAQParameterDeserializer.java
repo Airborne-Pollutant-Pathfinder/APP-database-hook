@@ -1,7 +1,7 @@
-package cs.utdallas.edu.app.database.api.openaq;
+package edu.utdallas.cs.app.database.api.openaq;
 
 import com.google.gson.*;
-import cs.utdallas.edu.app.database.PollutantType;
+import edu.utdallas.cs.app.database.PollutantType;
 
 import java.lang.reflect.Type;
 

@@ -1,12 +1,12 @@
-package cs.utdallas.edu.app.database.api.openaq;
+package edu.utdallas.cs.app.database.api.openaq;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import cs.utdallas.edu.app.database.PollutantType;
-import cs.utdallas.edu.app.database.api.APIClient;
-import cs.utdallas.edu.app.database.api.APIReading;
-import cs.utdallas.edu.app.database.api.APISource;
-import cs.utdallas.edu.app.database.table.Sensor;
+import edu.utdallas.cs.app.database.PollutantType;
+import edu.utdallas.cs.app.database.api.APIClient;
+import edu.utdallas.cs.app.database.api.APIReading;
+import edu.utdallas.cs.app.database.api.APISource;
+import edu.utdallas.cs.app.database.table.Sensor;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -20,7 +20,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static cs.utdallas.edu.app.database.PollutantType.*;
+import static edu.utdallas.cs.app.database.PollutantType.PM10;
+import static edu.utdallas.cs.app.database.PollutantType.PM2_5;
 
 public final class OpenAQAPIClient implements APIClient {
     @Override

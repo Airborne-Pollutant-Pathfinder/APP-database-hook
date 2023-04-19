@@ -1,4 +1,4 @@
-package cs.utdallas.edu.app.database.api;
+package edu.utdallas.cs.app.database.api;
 
 public enum APISource {
     OPENAQ, CUSTOM

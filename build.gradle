@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group = 'cs.utdallas.edu.app'
+group = 'edu.utdallas.cs.app'
 version = '1.0-SNAPSHOT'
 
 repositories {
@@ -26,6 +26,9 @@ dependencies {
 
     // Gson
     implementation 'com.google.code.gson:gson:2.10.1'
+
+    // Spring
+    implementation 'org.springframework.boot:spring-boot-starter-webflux:3.0.5'
 }
 
 test {

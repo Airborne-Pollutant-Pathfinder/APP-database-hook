@@ -1,4 +1,4 @@
-package cs.utdallas.edu.app.database.table;
+package edu.utdallas.cs.app.database.table;
 
 import jakarta.persistence.*;
 

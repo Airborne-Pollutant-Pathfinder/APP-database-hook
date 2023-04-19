@@ -1,4 +1,4 @@
-package cs.utdallas.edu.app.database.api.openaq;
+package edu.utdallas.cs.app.database.api.openaq;
 
 public class OpenAQResult {
     private String location;

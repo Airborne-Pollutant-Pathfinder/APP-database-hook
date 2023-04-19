@@ -1,7 +1,7 @@
-package cs.utdallas.edu.app.database.api;
+package edu.utdallas.cs.app.database.api;
 
-import cs.utdallas.edu.app.database.PollutantType;
-import cs.utdallas.edu.app.database.table.Sensor;
+import edu.utdallas.cs.app.database.PollutantType;
+import edu.utdallas.cs.app.database.table.Sensor;
 
 import java.io.IOException;
 import java.util.Collection;
