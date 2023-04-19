@@ -5,9 +5,10 @@ import cs.utdallas.edu.app.database.table.Sensor;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Optional;
 
 public interface APIClient {
     Collection<PollutantType> getSupportedPollutants();
 
-    void fetchData(long since, Sensor sensor, PollutantType pollutant) throws IOException;
+    Optional<APIReading> fetchData(long since, Sensor sensor, PollutantType pollutant) throws IOException;
 }

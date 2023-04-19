@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import cs.utdallas.edu.app.database.PollutantType;
 import cs.utdallas.edu.app.database.api.APIClient;
+import cs.utdallas.edu.app.database.api.APIReading;
 import cs.utdallas.edu.app.database.api.APISource;
 import cs.utdallas.edu.app.database.table.Sensor;
 import okhttp3.HttpUrl;
@@ -12,16 +13,20 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static cs.utdallas.edu.app.database.PollutantType.*;
 
 public final class OpenAQAPIClient implements APIClient {
     @Override
-    public void fetchData(long since, Sensor sensor, PollutantType pollutant) throws IOException {
+    public Optional<APIReading> fetchData(long since, Sensor sensor, PollutantType pollutant) throws IOException {
         if (sensor.getSource() != APISource.OPENAQ) {
-            return;
+            return Optional.empty();
         }
 
         HttpUrl url = createHttpUrl(sensor);
@@ -45,13 +50,14 @@ public final class OpenAQAPIClient implements APIClient {
 
             if (parameter != null) {
                 double value = parameter.getLastValue();
-                String unit = parameter.getUnit();
-                String lastUpdated = parameter.getLastUpdated();
-                System.out.printf(
-                        "Latest " + pollutant + " readings for location %s: %f %s (%s)\n",
-                        sensor.getSourceId(), value, unit, lastUpdated);
+                Date lastUpdated = createDate(parameter.getLastUpdated());
+                return Optional.of(APIReading.of(pollutant, lastUpdated, value));
             }
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
         }
+
+        return Optional.empty();
     }
 
     private HttpUrl createHttpUrl(Sensor sensor) {
@@ -65,6 +71,20 @@ public final class OpenAQAPIClient implements APIClient {
                 .addQueryParameter("sort", "desc")
                 .addQueryParameter("order_by", "lastUpdated")
                 .build();
+    }
+
+    private Date createDate(String raw) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        if (raw.endsWith("Z")) {
+            // This is UTC time with a "Z" suffix. Replace "Z" with "+0000" to match the date format string.
+            raw = raw.substring(0, raw.length() - 1) + "+0000";
+        } else {
+            // This is a timezone offset time. Insert a colon ":" between the hour and minute components of the offset.
+            int offsetIndex = raw.length() - 6;
+            String offset = raw.substring(offsetIndex);
+            raw = raw.substring(0, offsetIndex) + offset.substring(0, 3) + ":" + offset.substring(3);
+        }
+        return dateFormat.parse(raw);
     }
 
     @Override
