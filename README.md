@@ -1,7 +1,7 @@
 # APP-database-hook
 
-This database hook is responsible for fetching data from 3rd party APIs. It also provides a webhook for an application
-to attach listeners to, so they can receive updates when new data is available. It uses Hibernate and Spark.
+This database hook is responsible for fetching data from 3rd party APIs. It also provides an SSE for an application
+to attach listeners to, so they can receive updates when new data is available. It uses Hibernate and Spring WebFlux.
 
 ## Setup
 
@@ -14,7 +14,7 @@ The APP-database-hook comes with a Server-Sent Event stream to listen for when s
 can be subscribed to for listeners to know when data has been updated. The SSE is located at
 `/sse`, with an endpoint to connect to after (i.e. `/sse/captured-pollutant`).
 
-Below is an example of a webhook listener in Java using Spring WebFlux:
+Below is an example of an SSE listener in Java using Spring WebFlux:
 
 ```java
 WebClient client = WebClient.create("http://localhost:8080/sse");
