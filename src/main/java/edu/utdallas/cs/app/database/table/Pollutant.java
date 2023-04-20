@@ -18,4 +18,8 @@ public class Pollutant {
 
     @Column(name = "full_name")
     private String fullName;
+
+    public int getId() {
+        return id;
+    }
 }

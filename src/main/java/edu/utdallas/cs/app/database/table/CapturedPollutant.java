@@ -27,16 +27,32 @@ public class CapturedPollutant {
     @Column(name = "value")
     private double value;
 
+    public Sensor getSensor() {
+        return sensor;
+    }
+
     public void setSensor(Sensor sensor) {
         this.sensor = sensor;
+    }
+
+    public Pollutant getPollutant() {
+        return pollutant;
     }
 
     public void setPollutant(Pollutant pollutant) {
         this.pollutant = pollutant;
     }
 
+    public Date getDatetime() {
+        return datetime;
+    }
+
     public void setDatetime(Date datetime) {
         this.datetime = datetime;
+    }
+
+    public double getValue() {
+        return value;
     }
 
     public void setValue(double value) {

@@ -2,6 +2,8 @@ package edu.utdallas.cs.app.database;
 
 import edu.utdallas.cs.app.database.api.APIReading;
 import edu.utdallas.cs.app.database.api.APIRepository;
+import edu.utdallas.cs.app.database.sse.CapturedPollutantUpdate;
+import edu.utdallas.cs.app.database.sse.SSEPublisher;
 import edu.utdallas.cs.app.database.table.CapturedPollutant;
 import edu.utdallas.cs.app.database.table.Pollutant;
 import edu.utdallas.cs.app.database.table.Sensor;
@@ -19,13 +21,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class FetchDataTask implements Runnable {
     private final SessionFactory sessionFactory;
     private final APIRepository apiRepository;
-    private final String webhookSecret;
+    private final SSEPublisher<CapturedPollutantUpdate> publisher;
     private long lastRun = 0;
 
-    public FetchDataTask(SessionFactory sessionFactory, APIRepository apiRepository, String webhookSecret) {
+    public FetchDataTask(SessionFactory sessionFactory, APIRepository apiRepository, SSEPublisher<CapturedPollutantUpdate> publisher) {
         this.sessionFactory = sessionFactory;
         this.apiRepository = apiRepository;
-        this.webhookSecret = webhookSecret;
+        this.publisher = publisher;
     }
 
     @Override
@@ -54,6 +56,8 @@ public final class FetchDataTask implements Runnable {
                                 capturedPollutant.setValue(data.getValue());
 
                                 saveCapturedPollutant(session, capturedPollutant);
+                                publisher.publish(CapturedPollutantUpdate.fromDatabaseRow(capturedPollutant));
+
                                 updatedSensorIds.add(sensor.getId());
                                 total.getAndIncrement();
                             }
