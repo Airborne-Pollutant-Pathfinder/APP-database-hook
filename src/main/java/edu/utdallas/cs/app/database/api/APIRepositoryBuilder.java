@@ -8,15 +8,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class APIRepositoryBuilder {
-    private final Map<PollutantType, Collection<APIClient>> apiClientsForPollutant = new HashMap<>();
+    private final Map<PollutantType, Collection<APIAdapter>> apiClientsForPollutant = new HashMap<>();
 
-    public APIRepositoryBuilder register(PollutantType pollutant, APIClient client) {
+    public APIRepositoryBuilder register(PollutantType pollutant, APIAdapter client) {
         apiClientsForPollutant.putIfAbsent(pollutant, new ArrayList<>());
         apiClientsForPollutant.get(pollutant).add(client);
         return this;
     }
 
-    public APIRepositoryBuilder registerAllSupportedPollutants(APIClient client) {
+    public APIRepositoryBuilder registerAllSupportedPollutants(APIAdapter client) {
         client.getSupportedPollutants().forEach(pollutant -> register(pollutant, client));
         return this;
     }

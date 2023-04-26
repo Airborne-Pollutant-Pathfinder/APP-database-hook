@@ -7,7 +7,7 @@ import com.influxdb.client.InfluxDBClientFactory;
 import com.influxdb.query.FluxRecord;
 import com.influxdb.query.FluxTable;
 import edu.utdallas.cs.app.database.PollutantType;
-import edu.utdallas.cs.app.database.api.APIClient;
+import edu.utdallas.cs.app.database.api.APIAdapter;
 import edu.utdallas.cs.app.database.api.APIReading;
 import edu.utdallas.cs.app.database.api.APISource;
 import edu.utdallas.cs.app.database.table.Sensor;
@@ -20,7 +20,7 @@ import java.util.*;
 import static edu.utdallas.cs.app.database.PollutantType.PM10;
 import static edu.utdallas.cs.app.database.PollutantType.PM2_5;
 
-public class MINTSAPIClient implements APIClient {
+public class MINTSAdapter implements APIAdapter {
     private static final BiMap<PollutantType, String> POLLUTANT_TO_FIELD = ImmutableBiMap.<PollutantType, String>builder()
             .put(PM2_5, "pm2_5")
             .put(PM10, "pm10_0")
@@ -31,7 +31,7 @@ public class MINTSAPIClient implements APIClient {
     private final InfluxDBClient client;
     private final SimpleDateFormat dateFormat;
 
-    public MINTSAPIClient(String bucket, String org, String token, String url) {
+    public MINTSAdapter(String bucket, String org, String token, String url) {
         this.bucket = bucket;
         client = InfluxDBClientFactory.create(url, token.toCharArray(), org, bucket);
         dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");

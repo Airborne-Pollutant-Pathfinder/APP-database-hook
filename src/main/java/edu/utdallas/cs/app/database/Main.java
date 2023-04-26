@@ -1,8 +1,8 @@
 package edu.utdallas.cs.app.database;
 
 import edu.utdallas.cs.app.database.api.APIRepository;
-import edu.utdallas.cs.app.database.api.mints.MINTSAPIClient;
-import edu.utdallas.cs.app.database.api.openaq.OpenAQAPIClient;
+import edu.utdallas.cs.app.database.api.mints.MINTSAdapter;
+import edu.utdallas.cs.app.database.api.openaq.OpenAQAdapter;
 import edu.utdallas.cs.app.database.sse.CapturedPollutantUpdate;
 import edu.utdallas.cs.app.database.sse.SSEPublisher;
 import org.hibernate.SessionFactory;
@@ -21,12 +21,12 @@ public class Main {
 
         // Initialize API clients
         APIRepository apiRepository = APIRepository.builder()
-                .registerAllSupportedPollutants(new MINTSAPIClient(
+                .registerAllSupportedPollutants(new MINTSAdapter(
                         System.getenv("MINTS_BUCKET"),
                         System.getenv("MINTS_ORG"),
                         System.getenv("MINTS_TOKEN"),
                         System.getenv("MINTS_URL")))
-                .registerAllSupportedPollutants(new OpenAQAPIClient())
+                .registerAllSupportedPollutants(new OpenAQAdapter())
                 .build();
 
         // Initialize Spring Boot for SSE

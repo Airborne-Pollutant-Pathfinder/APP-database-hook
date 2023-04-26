@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 
-public interface APIClient {
+public interface APIAdapter {
     Optional<APIReading> fetchData(long since, Sensor sensor, PollutantType pollutant) throws IOException;
 
     Collection<PollutantType> getSupportedPollutants();
