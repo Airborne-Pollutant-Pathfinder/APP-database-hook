@@ -29,6 +29,12 @@ dependencies {
 
     // Spring
     implementation 'org.springframework.boot:spring-boot-starter-webflux:3.0.5'
+
+    // InfluxDB
+    implementation 'com.influxdb:influxdb-client-java:6.8.0'
+
+    // Guava
+    implementation 'com.google.guava:guava:31.1-jre'
 }
 
 test {
