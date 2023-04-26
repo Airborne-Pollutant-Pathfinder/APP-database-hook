@@ -9,7 +9,7 @@ public interface APIRepository {
         return new APIRepositoryBuilder();
     }
 
-    Collection<APIAdapter> getClients(PollutantType pollutant);
+    Collection<APIAdapter> getAdapters(PollutantType pollutant);
 
     Collection<PollutantType> getSupportedPollutants();
 }

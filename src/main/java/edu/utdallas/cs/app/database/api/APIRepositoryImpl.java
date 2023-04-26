@@ -14,7 +14,7 @@ public final class APIRepositoryImpl implements APIRepository {
     }
 
     @Override
-    public Collection<APIAdapter> getClients(PollutantType pollutant) {
+    public Collection<APIAdapter> getAdapters(PollutantType pollutant) {
         return apiClientsForPollutant.getOrDefault(pollutant, Collections.emptyList());
     }
 

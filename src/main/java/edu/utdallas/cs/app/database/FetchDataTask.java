@@ -1,5 +1,6 @@
 package edu.utdallas.cs.app.database;
 
+import edu.utdallas.cs.app.database.api.APIAdapter;
 import edu.utdallas.cs.app.database.api.APIReading;
 import edu.utdallas.cs.app.database.api.APIRepository;
 import edu.utdallas.cs.app.database.sse.CapturedPollutantUpdate;
@@ -45,7 +46,7 @@ public final class FetchDataTask implements Runnable {
                 for (PollutantType pollutant : apiRepository.getSupportedPollutants()) {
                     CapturedPollutant capturedPollutant = new CapturedPollutant();
 
-                    apiRepository.getClients(pollutant).forEach(client -> {
+                    for (APIAdapter client : apiRepository.getAdapters(pollutant)) {
                         try {
                             Optional<APIReading> dataOpt = client.fetchData(lastRun, sensor, pollutant);
                             if (dataOpt.isPresent()) {
@@ -60,11 +61,13 @@ public final class FetchDataTask implements Runnable {
 
                                 updatedSensorIds.add(sensor.getId());
                                 total.getAndIncrement();
+
+                                break; // stop trying to get data for the pollutant the first moment we get valid data
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                    });
+                    }
                 }
             }
 
