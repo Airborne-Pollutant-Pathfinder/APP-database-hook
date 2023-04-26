@@ -16,12 +16,12 @@ to attach listeners to, so they can receive updates when new data is available. 
 
 The APP-database-hook comes with a Server-Sent Event stream to listen for when sensor data has been updated. The SSE
 can be subscribed to for listeners to know when data has been updated. The SSE is located at
-`/sse`, with an endpoint to connect to after (i.e. `/sse/captured-pollutant`).
+`/sse`, with an endpoint to connect to after (i.e. `/sse/captured-pollutant`). The port is at port `8081`.
 
 Below is an example of an SSE listener in Java using Spring WebFlux:
 
 ```java
-WebClient client = WebClient.create("http://localhost:8080/sse");
+WebClient client = WebClient.create("http://localhost:8081/sse");
 ParameterizedTypeReference<ServerSentEvent<CapturedPollutantUpdate>> type = new ParameterizedTypeReference<>() {};
 
 Flux<ServerSentEvent<CapturedPollutantUpdate>> eventStream = client.get()
