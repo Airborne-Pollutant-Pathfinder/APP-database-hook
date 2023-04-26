@@ -27,7 +27,7 @@ public class Sensor {
     private APISource source;
 
     @Column(name = "source_id")
-    private int sourceId;
+    private String sourceId;
 
     public int getId() {
         return id;
@@ -49,7 +49,7 @@ public class Sensor {
         return source;
     }
 
-    public int getSourceId() {
+    public String getSourceId() {
         return sourceId;
     }
 }
