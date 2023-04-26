@@ -29,6 +29,6 @@ public class Main {
 
         // Start fetch data task
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(new FetchDataTask(factory, apiRepository, publisher), 0, 2, TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(new FetchDataTask(factory, apiRepository, publisher), 0, 5, TimeUnit.MINUTES);
     }
 }
