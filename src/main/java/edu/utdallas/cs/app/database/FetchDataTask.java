@@ -12,6 +12,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -20,6 +22,8 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class FetchDataTask implements Runnable {
+    private static final Logger LOGGER = LoggerFactory.getLogger(FetchDataTask.class);
+
     private final SessionFactory sessionFactory;
     private final APIRepository apiRepository;
     private final SSEPublisher<CapturedPollutantUpdate> publisher;
@@ -71,7 +75,7 @@ public final class FetchDataTask implements Runnable {
                 }
             }
 
-            System.out.println("Fetched " + total + " pollutants for " + updatedSensorIds.size() + " sensors.");
+            LOGGER.info("Fetched " + total + " pollutants for " + updatedSensorIds.size() + " sensors.");
             lastRun = System.currentTimeMillis();
         } catch (HibernateException e) {
             e.printStackTrace();
