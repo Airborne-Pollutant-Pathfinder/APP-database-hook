@@ -38,7 +38,7 @@ public class MINTSAdapter implements APIAdapter {
     }
 
     @Override
-    public Optional<APIReading> fetchData(long since, Sensor sensor, PollutantType pollutant) {
+    public Optional<APIReading> fetchData(long sinceMs, Sensor sensor, PollutantType pollutant) {
         if (sensor.getSource() != APISource.MINTS) {
             return Optional.empty();
         }

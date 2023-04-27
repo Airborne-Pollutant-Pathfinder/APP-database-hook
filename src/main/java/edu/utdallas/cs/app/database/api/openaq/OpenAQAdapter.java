@@ -45,7 +45,7 @@ public final class OpenAQAdapter implements APIAdapter {
     }
 
     @Override
-    public Optional<APIReading> fetchData(long since, Sensor sensor, PollutantType pollutant) throws IOException {
+    public Optional<APIReading> fetchData(long sinceMs, Sensor sensor, PollutantType pollutant) throws IOException {
         if (sensor.getSource() != APISource.OPENAQ) {
             return Optional.empty();
         }

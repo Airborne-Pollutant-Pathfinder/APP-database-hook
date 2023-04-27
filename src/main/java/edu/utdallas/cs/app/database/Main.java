@@ -16,6 +16,8 @@ import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 public class Main {
+    public static final int MINUTES_TO_FETCH = 5;
+
     public static void main(String[] args) {
         SessionFactory factory = SessionFactoryMaker.getFactory();
 
@@ -35,6 +37,6 @@ public class Main {
 
         // Start fetch data task
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(new FetchDataTask(factory, apiRepository, publisher), 0, 5, TimeUnit.MINUTES);
+        executor.scheduleAtFixedRate(new FetchDataTask(factory, apiRepository, publisher), 0, MINUTES_TO_FETCH, TimeUnit.MINUTES);
     }
 }

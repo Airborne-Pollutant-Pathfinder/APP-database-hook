@@ -3,6 +3,7 @@ package edu.utdallas.cs.app.database;
 import edu.utdallas.cs.app.database.table.CapturedPollutant;
 import edu.utdallas.cs.app.database.table.Pollutant;
 import edu.utdallas.cs.app.database.table.Sensor;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 

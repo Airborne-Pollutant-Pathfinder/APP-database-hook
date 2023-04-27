@@ -15,10 +15,7 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class FetchDataTask implements Runnable {
@@ -27,17 +24,18 @@ public final class FetchDataTask implements Runnable {
     private final SessionFactory sessionFactory;
     private final APIRepository apiRepository;
     private final SSEPublisher<CapturedPollutantUpdate> publisher;
-    private long lastRun = 0;
+    private long lastRun;
 
     public FetchDataTask(SessionFactory sessionFactory, APIRepository apiRepository, SSEPublisher<CapturedPollutantUpdate> publisher) {
         this.sessionFactory = sessionFactory;
         this.apiRepository = apiRepository;
         this.publisher = publisher;
+        lastRun = calculateInitialLastRun();
     }
 
     @Override
     public void run() {
-        try (Session session = sessionFactory.openSession()) {
+        try (Session session = openSession()) {
             List<Sensor> sensors = fetchListOfSensors(session);
 
             Collection<Integer> updatedSensorIds = new HashSet<>();
@@ -103,5 +101,29 @@ public final class FetchDataTask implements Runnable {
         Transaction tx = session.beginTransaction();
         session.persist(capturedPollutant);
         tx.commit();
+    }
+
+    /**
+     * This computes the last time the database was updated in between two runs of the database hook.
+     * @return the millisecond epoch time that the last run occurred before the program start.
+     */
+    private long calculateInitialLastRun() {
+        try (Session session = openSession()) {
+            Transaction tx = session.beginTransaction();
+            Date latestDate = session.createQuery("SELECT MAX(c.datetime) FROM CapturedPollutant c", Date.class)
+                            .uniqueResult();
+            tx.commit();
+            return latestDate.getTime();
+        } catch (Exception e) {
+            LOGGER.error("Failed to calculate initial last run time.");
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    private Session openSession() {
+        return sessionFactory.withOptions()
+                .jdbcTimeZone(TimeZone.getTimeZone("UTC"))
+                .openSession();
     }
 }
