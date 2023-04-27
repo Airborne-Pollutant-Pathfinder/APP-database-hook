@@ -6,6 +6,7 @@ import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.InfluxDBClientFactory;
 import com.influxdb.query.FluxRecord;
 import com.influxdb.query.FluxTable;
+import edu.utdallas.cs.app.database.Main;
 import edu.utdallas.cs.app.database.PollutantType;
 import edu.utdallas.cs.app.database.api.APIAdapter;
 import edu.utdallas.cs.app.database.api.APIReading;
@@ -15,6 +16,9 @@ import edu.utdallas.cs.app.database.util.DateUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import static edu.utdallas.cs.app.database.PollutantType.PM10;
@@ -29,12 +33,12 @@ public class MINTSAdapter implements APIAdapter {
 
     private final String bucket;
     private final InfluxDBClient client;
-    private final SimpleDateFormat dateFormat;
+    private final DateTimeFormatter formatter;
 
     public MINTSAdapter(String bucket, String org, String token, String url) {
         this.bucket = bucket;
         client = InfluxDBClientFactory.create(url, token.toCharArray(), org, bucket);
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS'Z'");
     }
 
     @Override
@@ -43,8 +47,12 @@ public class MINTSAdapter implements APIAdapter {
             return Optional.empty();
         }
 
+        long minutesSince = calculateMinutesSince(sinceMs);
+
+        System.out.println("minutesSince = " + minutesSince);
+
         String query = String.format("from(bucket: \"%s\")\n"
-                + "  |> range(start: -1m)\n"
+                + "  |> range(start: -" + minutesSince + "m)\n"
                 + "  |> filter(fn: (r) => r[\"_measurement\"] == \"" + MEASUREMENT + "\")\n"
                 + "  |> filter(fn: (r) => r[\"_field\"] == \"" + POLLUTANT_TO_FIELD.get(pollutant) + "\")\n"
                 + "  |> filter(fn: (r) => r[\"device_id\"] == \"%s\")\n"
@@ -55,6 +63,13 @@ public class MINTSAdapter implements APIAdapter {
         // We expect only 1 table and 1 record based on the query
         if (tables.isEmpty()) {
             return Optional.empty();
+        }
+
+        for (FluxTable table : tables) {
+            for (FluxRecord record : table.getRecords()) {
+                System.out.println("record = " + record);
+                System.out.println("record.getValues() = " + record.getValues());
+            }
         }
 
         FluxTable table = tables.get(0);
@@ -72,13 +87,24 @@ public class MINTSAdapter implements APIAdapter {
 
         try {
             double value = Double.parseDouble(values.get("_value").toString());
-            Date date = DateUtil.createDate(dateFormat, values.get("_time").toString());
+            Date date = DateUtil.createDate(formatter, values.get("_stop").toString());
+            System.out.println("date = " + date);
             return Optional.of(APIReading.of(pollutant, date, value));
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         return Optional.empty();
+    }
+
+    private long calculateMinutesSince(long sinceMs) {
+        if (sinceMs == 0) {
+            return Main.MINUTES_TO_FETCH;
+        }
+        Instant instant1 = Instant.ofEpochMilli(System.currentTimeMillis());
+        Instant instant2 = Instant.ofEpochMilli(sinceMs);
+        // we need at least one minute, since 0 minutes is an invalid query
+        return Math.max(1, ChronoUnit.MINUTES.between(instant1, instant2));
     }
 
     @Override

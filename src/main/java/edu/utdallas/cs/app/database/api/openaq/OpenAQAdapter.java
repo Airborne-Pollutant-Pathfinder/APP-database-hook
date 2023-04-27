@@ -18,10 +18,8 @@ import okhttp3.Response;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import static edu.utdallas.cs.app.database.PollutantType.PM10;
 import static edu.utdallas.cs.app.database.PollutantType.PM2_5;
@@ -34,14 +32,14 @@ public final class OpenAQAdapter implements APIAdapter {
 
     private final OkHttpClient client;
     private final Gson gson;
-    private final SimpleDateFormat dateFormat;
+    private final DateTimeFormatter formatter;
 
     public OpenAQAdapter() {
         client = new OkHttpClient();
         gson = new GsonBuilder()
                 .registerTypeAdapter(OpenAQParameter.class, new OpenAQParameterDeserializer(POLLUTANT_TO_FIELD))
                 .create();
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
     }
 
     @Override
@@ -67,7 +65,7 @@ public final class OpenAQAdapter implements APIAdapter {
 
             if (parameter != null) {
                 double value = parameter.getLastValue();
-                Date lastUpdated = DateUtil.createDate(dateFormat, parameter.getLastUpdated());
+                Date lastUpdated = DateUtil.createDate(formatter, parameter.getLastUpdated());
                 return Optional.of(APIReading.of(pollutant, lastUpdated, value));
             }
         } catch (ParseException e) {
