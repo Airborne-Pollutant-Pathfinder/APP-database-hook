@@ -67,8 +67,6 @@ public class MINTSAdapter implements APIAdapter {
         FluxRecord record = table.getRecords().get(0);
         Map<String, Object> values = record.getValues();
 
-        System.out.println("values = " + values);
-
         if (!values.containsKey("_value")) {
             return Optional.empty();
         }
