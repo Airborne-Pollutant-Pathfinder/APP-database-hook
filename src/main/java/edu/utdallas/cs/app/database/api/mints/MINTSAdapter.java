@@ -48,7 +48,7 @@ public class MINTSAdapter implements APIAdapter {
                 + "  |> filter(fn: (r) => r[\"_measurement\"] == \"" + MEASUREMENT + "\")\n"
                 + "  |> filter(fn: (r) => r[\"_field\"] == \"" + POLLUTANT_TO_FIELD.get(pollutant) + "\")\n"
                 + "  |> filter(fn: (r) => r[\"device_id\"] == \"%s\")\n"
-                + "  |> last()", bucket, sensor.getSourceId());
+                + "  |> mean()", bucket, sensor.getSourceId());
 
         List<FluxTable> tables = client.getQueryApi().query(query);
 
