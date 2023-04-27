@@ -17,7 +17,6 @@ import okhttp3.Response;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -43,7 +42,7 @@ public final class OpenAQAdapter implements APIAdapter {
     }
 
     @Override
-    public Optional<APIReading> fetchData(long sinceMs, Sensor sensor, PollutantType pollutant) throws IOException {
+    public Optional<APIReading> fetchData(Sensor sensor, PollutantType pollutant) throws IOException {
         if (sensor.getSource() != APISource.OPENAQ) {
             return Optional.empty();
         }

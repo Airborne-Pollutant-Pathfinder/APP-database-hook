@@ -15,10 +15,7 @@ import edu.utdallas.cs.app.database.table.Sensor;
 import edu.utdallas.cs.app.database.util.DateUtil;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import static edu.utdallas.cs.app.database.PollutantType.PM10;
@@ -42,14 +39,13 @@ public class MINTSAdapter implements APIAdapter {
     }
 
     @Override
-    public Optional<APIReading> fetchData(long sinceMs, Sensor sensor, PollutantType pollutant) {
+    public Optional<APIReading> fetchData(Sensor sensor, PollutantType pollutant) {
         if (sensor.getSource() != APISource.MINTS) {
             return Optional.empty();
         }
 
-        long minutesSince = calculateMinutesSince(sinceMs);
         String query = String.format("from(bucket: \"%s\")\n"
-                + "  |> range(start: -" + minutesSince + "m)\n"
+                + "  |> range(start: -" + Main.MINUTES_TO_FETCH + "m)\n"
                 + "  |> filter(fn: (r) => r[\"_measurement\"] == \"" + MEASUREMENT + "\")\n"
                 + "  |> filter(fn: (r) => r[\"_field\"] == \"" + POLLUTANT_TO_FIELD.get(pollutant) + "\")\n"
                 + "  |> filter(fn: (r) => r[\"device_id\"] == \"%s\")\n"
@@ -71,6 +67,8 @@ public class MINTSAdapter implements APIAdapter {
         FluxRecord record = table.getRecords().get(0);
         Map<String, Object> values = record.getValues();
 
+        System.out.println("values = " + values);
+
         if (!values.containsKey("_value")) {
             return Optional.empty();
         }
@@ -84,16 +82,6 @@ public class MINTSAdapter implements APIAdapter {
         }
 
         return Optional.empty();
-    }
-
-    private long calculateMinutesSince(long sinceMs) {
-        if (sinceMs == 0) {
-            return Main.MINUTES_TO_FETCH;
-        }
-        Instant instant1 = Instant.ofEpochMilli(System.currentTimeMillis());
-        Instant instant2 = Instant.ofEpochMilli(sinceMs);
-        // we need at least one minute, since 0 minutes is an invalid query
-        return Math.max(1, ChronoUnit.MINUTES.between(instant1, instant2));
     }
 
     @Override
