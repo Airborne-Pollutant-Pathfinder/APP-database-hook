@@ -48,9 +48,6 @@ public class MINTSAdapter implements APIAdapter {
         }
 
         long minutesSince = calculateMinutesSince(sinceMs);
-
-        System.out.println("minutesSince = " + minutesSince);
-
         String query = String.format("from(bucket: \"%s\")\n"
                 + "  |> range(start: -" + minutesSince + "m)\n"
                 + "  |> filter(fn: (r) => r[\"_measurement\"] == \"" + MEASUREMENT + "\")\n"
@@ -63,13 +60,6 @@ public class MINTSAdapter implements APIAdapter {
         // We expect only 1 table and 1 record based on the query
         if (tables.isEmpty()) {
             return Optional.empty();
-        }
-
-        for (FluxTable table : tables) {
-            for (FluxRecord record : table.getRecords()) {
-                System.out.println("record = " + record);
-                System.out.println("record.getValues() = " + record.getValues());
-            }
         }
 
         FluxTable table = tables.get(0);
@@ -88,7 +78,6 @@ public class MINTSAdapter implements APIAdapter {
         try {
             double value = Double.parseDouble(values.get("_value").toString());
             Date date = DateUtil.createDate(formatter, values.get("_stop").toString());
-            System.out.println("date = " + date);
             return Optional.of(APIReading.of(pollutant, date, value));
         } catch (ParseException e) {
             e.printStackTrace();
