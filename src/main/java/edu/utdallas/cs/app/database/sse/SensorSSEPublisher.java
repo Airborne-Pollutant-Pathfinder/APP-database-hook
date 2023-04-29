@@ -7,7 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
 @Component
-public class CapturedPollutantSSEPublisher implements SSEPublisher<CapturedPollutantUpdate> {
+public class SensorSSEPublisher implements SSEPublisher<CapturedPollutantUpdate> {
     private final List<Consumer<CapturedPollutantUpdate>> listeners = new CopyOnWriteArrayList<>();
 
     @Override

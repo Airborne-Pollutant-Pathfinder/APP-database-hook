@@ -10,9 +10,9 @@ import reactor.core.publisher.Flux;
 @RestController
 @RequestMapping(path = "/sse")
 public class DatabaseSSE {
-    private final CapturedPollutantSSEPublisher publisher;
+    private final SensorSSEPublisher publisher;
 
-    public DatabaseSSE(CapturedPollutantSSEPublisher publisher) {
+    public DatabaseSSE(SensorSSEPublisher publisher) {
         this.publisher = publisher;
     }
 

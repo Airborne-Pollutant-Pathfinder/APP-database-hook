@@ -5,6 +5,7 @@ import edu.utdallas.cs.app.database.api.APIMeasurement;
 import edu.utdallas.cs.app.database.api.APIRepository;
 import edu.utdallas.cs.app.database.sse.CapturedPollutantUpdate;
 import edu.utdallas.cs.app.database.sse.SSEPublisher;
+import edu.utdallas.cs.app.database.sse.SensorUpdate;
 import edu.utdallas.cs.app.database.table.CapturedPollutant;
 import edu.utdallas.cs.app.database.table.Pollutant;
 import edu.utdallas.cs.app.database.table.Sensor;
@@ -23,9 +24,9 @@ public final class FetchDataTask implements Runnable {
 
     private final SessionFactory sessionFactory;
     private final APIRepository apiRepository;
-    private final SSEPublisher<CapturedPollutantUpdate> publisher;
+    private final SSEPublisher<SensorUpdate> publisher;
 
-    public FetchDataTask(SessionFactory sessionFactory, APIRepository apiRepository, SSEPublisher<CapturedPollutantUpdate> publisher) {
+    public FetchDataTask(SessionFactory sessionFactory, APIRepository apiRepository, SSEPublisher<SensorUpdate> publisher) {
         this.sessionFactory = sessionFactory;
         this.apiRepository = apiRepository;
         this.publisher = publisher;
@@ -45,6 +46,7 @@ public final class FetchDataTask implements Runnable {
                 /* todo in the future, if this solution is not scalable, a queued approach will need to be used, where
                    we enqueue all these fetch data requests to a separate thread and execute there. If that is still
                    not enough, a multi-threaded approach would need to be used to handle the queue concurrently. */
+                List<CapturedPollutantUpdate> pollutantUpdates = new ArrayList<>();
                 for (PollutantType pollutant : apiRepository.getSupportedPollutants()) {
                     CapturedPollutant capturedPollutant = new CapturedPollutant();
 
@@ -59,7 +61,7 @@ public final class FetchDataTask implements Runnable {
                                 capturedPollutant.setValue(data.getValue());
 
                                 saveCapturedPollutant(session, capturedPollutant);
-                                publisher.publish(CapturedPollutantUpdate.fromDatabaseRow(capturedPollutant));
+                                pollutantUpdates.add(CapturedPollutantUpdate.fromDatabaseRow(capturedPollutant));
 
                                 updatedSensorIds.add(sensor.getId());
                                 total.getAndIncrement();
@@ -71,6 +73,7 @@ public final class FetchDataTask implements Runnable {
                         }
                     }
                 }
+                publisher.publish(SensorUpdate.of(sensor.getId(), pollutantUpdates));
             }
 
             LOGGER.info("Fetched " + total + " pollutants for " + updatedSensorIds.size() + " sensors.");

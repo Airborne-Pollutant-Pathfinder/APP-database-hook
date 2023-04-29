@@ -3,8 +3,8 @@ package edu.utdallas.cs.app.database;
 import edu.utdallas.cs.app.database.api.APIRepository;
 import edu.utdallas.cs.app.database.api.mints.MINTSAdapter;
 import edu.utdallas.cs.app.database.api.openaq.OpenAQAdapter;
-import edu.utdallas.cs.app.database.sse.CapturedPollutantUpdate;
 import edu.utdallas.cs.app.database.sse.SSEPublisher;
+import edu.utdallas.cs.app.database.sse.SensorUpdate;
 import org.hibernate.SessionFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -33,7 +33,7 @@ public class Main {
 
         // Initialize Spring Boot for SSE
         ApplicationContext context = SpringApplication.run(Main.class, args);
-        SSEPublisher<CapturedPollutantUpdate> publisher = context.getBean(SSEPublisher.class);
+        SSEPublisher<SensorUpdate> publisher = context.getBean(SSEPublisher.class);
 
         // Start fetch data task
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);

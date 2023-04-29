@@ -7,29 +7,22 @@ import java.util.Date;
 public class CapturedPollutantUpdate {
     public static CapturedPollutantUpdate fromDatabaseRow(CapturedPollutant pollutant) {
         return new CapturedPollutantUpdate(
-                pollutant.getSensor().getId(),
                 pollutant.getPollutant().getId(),
                 pollutant.getDatetime(),
                 pollutant.getValue());
     }
 
-    private int sensorId;
     private int pollutantId;
     private Date datetime;
     private double value;
 
-    public CapturedPollutantUpdate(int sensorId, int pollutantId, Date datetime, double value) {
-        this.sensorId = sensorId;
+    public CapturedPollutantUpdate(int pollutantId, Date datetime, double value) {
         this.pollutantId = pollutantId;
         this.datetime = datetime;
         this.value = value;
     }
 
     public CapturedPollutantUpdate() {
-    }
-
-    public int getSensorId() {
-        return sensorId;
     }
 
     public int getPollutantId() {
