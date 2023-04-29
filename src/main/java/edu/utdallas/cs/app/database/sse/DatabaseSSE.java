@@ -16,7 +16,7 @@ public class DatabaseSSE {
         this.publisher = publisher;
     }
 
-    @GetMapping(path = "/captured-pollutant", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(path = "/sensor", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<ServerSentEvent<Object>> capturedPollutant() {
         return Flux.create(sink -> publisher.subscribe(sink::next))
                 .map(result -> ServerSentEvent.builder()
