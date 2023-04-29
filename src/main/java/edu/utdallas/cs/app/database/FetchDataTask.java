@@ -73,7 +73,7 @@ public final class FetchDataTask implements Runnable {
                         }
                     }
                 }
-                publisher.publish(SensorUpdate.of(sensor.getId(), pollutantUpdates));
+                publisher.publish(SensorUpdate.of(sensor.getId(), sensor.getRadiusMeters(), pollutantUpdates));
             }
 
             LOGGER.info("Fetched " + total + " pollutants for " + updatedSensorIds.size() + " sensors.");

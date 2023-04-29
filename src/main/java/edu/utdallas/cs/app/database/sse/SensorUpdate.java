@@ -3,15 +3,17 @@ package edu.utdallas.cs.app.database.sse;
 import java.util.List;
 
 public class SensorUpdate {
-    public static SensorUpdate of(int sensorId, List<CapturedPollutantUpdate> pollutants) {
-        return new SensorUpdate(sensorId, pollutants);
+    public static SensorUpdate of(int sensorId, double radiusMeters, List<CapturedPollutantUpdate> pollutants) {
+        return new SensorUpdate(sensorId, radiusMeters, pollutants);
     }
 
     private int sensorId;
+    private double radiusMeters;
     private List<CapturedPollutantUpdate> pollutants;
 
-    public SensorUpdate(int sensorId, List<CapturedPollutantUpdate> pollutants) {
+    public SensorUpdate(int sensorId, double radiusMeters, List<CapturedPollutantUpdate> pollutants) {
         this.sensorId = sensorId;
+        this.radiusMeters = radiusMeters;
         this.pollutants = pollutants;
     }
 
