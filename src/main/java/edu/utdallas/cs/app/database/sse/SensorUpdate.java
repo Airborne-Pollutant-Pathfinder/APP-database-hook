@@ -24,6 +24,10 @@ public class SensorUpdate {
         return sensorId;
     }
 
+    public double getRadiusMeters() {
+        return radiusMeters;
+    }
+
     public List<CapturedPollutantUpdate> getPollutants() {
         return pollutants;
     }
