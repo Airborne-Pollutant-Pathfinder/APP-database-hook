@@ -4,9 +4,9 @@ import edu.utdallas.cs.app.database.PollutantType;
 
 import java.util.Date;
 
-public final class APIReading {
-    public static APIReading of(PollutantType pollutantType, Date dateTime, double value) {
-        return new APIReading(pollutantType, dateTime, value);
+public final class APIMeasurement {
+    public static APIMeasurement of(PollutantType pollutantType, Date dateTime, double value) {
+        return new APIMeasurement(pollutantType, dateTime, value);
     }
 
     private final PollutantType pollutantType;
@@ -15,7 +15,7 @@ public final class APIReading {
 
     private final double value;
 
-    private APIReading(PollutantType pollutantType, Date dateTime, double value) {
+    private APIMeasurement(PollutantType pollutantType, Date dateTime, double value) {
         this.pollutantType = pollutantType;
         this.dateTime = dateTime;
         this.value = value;

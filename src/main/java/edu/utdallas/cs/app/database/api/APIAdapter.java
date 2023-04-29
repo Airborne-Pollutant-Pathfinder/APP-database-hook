@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 public interface APIAdapter {
-    Optional<APIReading> fetchData(Sensor sensor, PollutantType pollutant) throws IOException;
+    Optional<APIMeasurement> fetchData(Sensor sensor, PollutantType pollutant) throws IOException;
 
     Collection<PollutantType> getSupportedPollutants();
 }

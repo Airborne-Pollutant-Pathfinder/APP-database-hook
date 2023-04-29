@@ -1,7 +1,7 @@
 package edu.utdallas.cs.app.database;
 
 import edu.utdallas.cs.app.database.api.APIAdapter;
-import edu.utdallas.cs.app.database.api.APIReading;
+import edu.utdallas.cs.app.database.api.APIMeasurement;
 import edu.utdallas.cs.app.database.api.APIRepository;
 import edu.utdallas.cs.app.database.sse.CapturedPollutantUpdate;
 import edu.utdallas.cs.app.database.sse.SSEPublisher;
@@ -50,9 +50,9 @@ public final class FetchDataTask implements Runnable {
 
                     for (APIAdapter client : apiRepository.getAdapters(pollutant)) {
                         try {
-                            Optional<APIReading> dataOpt = client.fetchData(sensor, pollutant);
+                            Optional<APIMeasurement> dataOpt = client.fetchData(sensor, pollutant);
                             if (dataOpt.isPresent()) {
-                                APIReading data = dataOpt.get();
+                                APIMeasurement data = dataOpt.get();
                                 capturedPollutant.setSensor(sensor);
                                 capturedPollutant.setPollutant(fetchPollutant(session, pollutant));
                                 capturedPollutant.setDatetime(data.getDateTime());

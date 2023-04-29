@@ -9,7 +9,7 @@ import com.influxdb.query.FluxTable;
 import edu.utdallas.cs.app.database.Main;
 import edu.utdallas.cs.app.database.PollutantType;
 import edu.utdallas.cs.app.database.api.APIAdapter;
-import edu.utdallas.cs.app.database.api.APIReading;
+import edu.utdallas.cs.app.database.api.APIMeasurement;
 import edu.utdallas.cs.app.database.api.APISource;
 import edu.utdallas.cs.app.database.table.Sensor;
 import edu.utdallas.cs.app.database.util.DateUtil;
@@ -39,7 +39,7 @@ public class MINTSAdapter implements APIAdapter {
     }
 
     @Override
-    public Optional<APIReading> fetchData(Sensor sensor, PollutantType pollutant) {
+    public Optional<APIMeasurement> fetchData(Sensor sensor, PollutantType pollutant) {
         if (sensor.getSource() != APISource.MINTS) {
             return Optional.empty();
         }
@@ -74,7 +74,7 @@ public class MINTSAdapter implements APIAdapter {
         try {
             double value = Double.parseDouble(values.get("_value").toString());
             Date date = DateUtil.createDate(formatter, values.get("_stop").toString());
-            return Optional.of(APIReading.of(pollutant, date, value));
+            return Optional.of(APIMeasurement.of(pollutant, date, value));
         } catch (ParseException e) {
             e.printStackTrace();
         }
