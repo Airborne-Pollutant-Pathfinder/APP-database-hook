@@ -9,6 +9,7 @@ import edu.utdallas.cs.app.database.PollutantType;
 import edu.utdallas.cs.app.database.api.APIAdapter;
 import edu.utdallas.cs.app.database.api.APIMeasurement;
 import edu.utdallas.cs.app.database.table.Sensor;
+import edu.utdallas.cs.app.database.util.ConversionUtil;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -44,12 +45,12 @@ public class OpenWeatherAdapter implements APIAdapter {
 
     private double getPollutantLevel(PollutantType pollutant, AirPollutionRecord record) {
         return switch (pollutant) {
-            case CO -> record.getCO();
-            case NO2 -> record.getNO2();
-            case O3 -> record.getO3();
+            case CO -> ConversionUtil.convertCO(record.getCO());
+            case NO2 -> ConversionUtil.convertNO2(record.getNO2());
+            case O3 -> ConversionUtil.convertO3(record.getO3());
             case PM2_5 -> record.getPM2_5();
             case PM10 -> record.getPM10();
-            case SO2 -> record.getSO2();
+            case SO2 -> ConversionUtil.convertSO2(record.getSO2());
         };
     }
 
