@@ -4,7 +4,6 @@ import com.github.prominence.openweathermap.api.OpenWeatherMapClient;
 import com.github.prominence.openweathermap.api.model.Coordinate;
 import com.github.prominence.openweathermap.api.model.air.pollution.AirPollutionDetails;
 import com.github.prominence.openweathermap.api.model.air.pollution.AirPollutionRecord;
-import com.github.prominence.openweathermap.api.request.air.pollution.AirPollutionRequester;
 import edu.utdallas.cs.app.database.PollutantType;
 import edu.utdallas.cs.app.database.api.APIAdapter;
 import edu.utdallas.cs.app.database.api.APIMeasurement;
@@ -23,15 +22,17 @@ import static edu.utdallas.cs.app.database.PollutantType.*;
 
 public class OpenWeatherAdapter implements APIAdapter {
 
-    private final AirPollutionRequester requester;
+    private final OpenWeatherMapClient client;
 
     public OpenWeatherAdapter(String apiToken) {
-        requester = new OpenWeatherMapClient(apiToken).airPollution();
+        client = new OpenWeatherMapClient(apiToken);
     }
 
     @Override
     public Optional<APIMeasurement> fetchData(Sensor sensor, PollutantType pollutant) throws IOException {
-        AirPollutionDetails details = requester.current()
+        AirPollutionDetails details = client
+                .airPollution()
+                .current()
                 .byCoordinate(Coordinate.of(sensor.getLocation().getY(), sensor.getLocation().getX()))
                 .retrieve()
                 .asJava();

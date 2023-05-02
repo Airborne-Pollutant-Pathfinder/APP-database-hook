@@ -3,6 +3,7 @@ package edu.utdallas.cs.app.database;
 import edu.utdallas.cs.app.database.api.APIRepository;
 import edu.utdallas.cs.app.database.api.mints.MINTSAdapter;
 import edu.utdallas.cs.app.database.api.openaq.OpenAQAdapter;
+import edu.utdallas.cs.app.database.api.openweather.OpenWeatherAdapter;
 import edu.utdallas.cs.app.database.sse.SSEPublisher;
 import edu.utdallas.cs.app.database.sse.SensorUpdate;
 import org.hibernate.SessionFactory;
@@ -29,6 +30,7 @@ public class Main {
                         System.getenv("MINTS_TOKEN"),
                         System.getenv("MINTS_URL")))
                 .registerAllSupportedPollutants(new OpenAQAdapter())
+                .registerAllSupportedPollutants(new OpenWeatherAdapter(System.getenv("OPENWEATHER_TOKEN")))
                 .build();
 
         // Initialize Spring Boot for SSE
