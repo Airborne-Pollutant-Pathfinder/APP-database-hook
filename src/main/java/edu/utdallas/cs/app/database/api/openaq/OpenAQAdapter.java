@@ -17,6 +17,8 @@ import okhttp3.Response;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Date;
@@ -81,6 +83,10 @@ public final class OpenAQAdapter extends CachedAPIAdapter {
             }
             double value = parameter.getLastValue();
             Date lastUpdated = DateUtil.createDate(formatter, parameter.getLastUpdated());
+            if (lastUpdated.before(Date.from(Instant.now().minus(Duration.ofDays(1))))) {
+                // ignore old data
+                continue;
+            }
             APIMeasurement measurement = APIMeasurement.of(parameter.getPollutantType(), lastUpdated, value);
             cacheValue(sensor, parameter.getPollutantType(), measurement);
         }
