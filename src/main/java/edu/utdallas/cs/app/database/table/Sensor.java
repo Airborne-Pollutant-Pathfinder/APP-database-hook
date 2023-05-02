@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "sensor")
 public class Sensor {
@@ -51,5 +53,18 @@ public class Sensor {
 
     public String getSourceId() {
         return sourceId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Sensor sensor = (Sensor) o;
+        return id == sensor.id && Double.compare(sensor.radiusMeters, radiusMeters) == 0 && Objects.equals(location, sensor.location) && Objects.equals(area, sensor.area) && source == sensor.source && Objects.equals(sourceId, sensor.sourceId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, location, radiusMeters, area, source, sourceId);
     }
 }

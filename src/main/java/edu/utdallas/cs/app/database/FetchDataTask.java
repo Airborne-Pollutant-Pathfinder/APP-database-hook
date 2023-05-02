@@ -77,6 +77,8 @@ public final class FetchDataTask implements Runnable {
             }
 
             LOGGER.info("Fetched " + total + " pollutants for " + updatedSensorIds.size() + " sensors.");
+
+            apiRepository.clearCachedAdapters();
         } catch (HibernateException e) {
             e.printStackTrace();
         }

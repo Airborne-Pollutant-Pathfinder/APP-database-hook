@@ -5,8 +5,8 @@ import com.github.prominence.openweathermap.api.model.Coordinate;
 import com.github.prominence.openweathermap.api.model.air.pollution.AirPollutionDetails;
 import com.github.prominence.openweathermap.api.model.air.pollution.AirPollutionRecord;
 import edu.utdallas.cs.app.database.PollutantType;
-import edu.utdallas.cs.app.database.api.APIAdapter;
 import edu.utdallas.cs.app.database.api.APIMeasurement;
+import edu.utdallas.cs.app.database.api.CachedAPIAdapter;
 import edu.utdallas.cs.app.database.table.Sensor;
 import edu.utdallas.cs.app.database.util.ConversionUtil;
 
@@ -20,7 +20,7 @@ import java.util.Optional;
 
 import static edu.utdallas.cs.app.database.PollutantType.*;
 
-public class OpenWeatherAdapter implements APIAdapter {
+public class OpenWeatherAdapter extends CachedAPIAdapter {
 
     private final OpenWeatherMapClient client;
 
@@ -30,6 +30,10 @@ public class OpenWeatherAdapter implements APIAdapter {
 
     @Override
     public Optional<APIMeasurement> fetchData(Sensor sensor, PollutantType pollutant) throws IOException {
+        if (cacheContains(sensor, pollutant)) {
+            return Optional.of(getCachedValue(sensor, pollutant));
+        }
+
         AirPollutionDetails details = client
                 .airPollution()
                 .current()
@@ -40,8 +44,16 @@ public class OpenWeatherAdapter implements APIAdapter {
             throw new IOException("Blank data returned by OpenWeatherMap API for sensor " + sensor.getId() + " and pollutant " + pollutant + ".");
         }
         AirPollutionRecord record = details.getAirPollutionRecords().get(0);
-        double value = getPollutantLevel(pollutant, record);
-        return Optional.of(APIMeasurement.of(pollutant, Date.from(Instant.now(Clock.systemUTC())), value));
+        cacheValues(sensor, record);
+        return Optional.of(getCachedValue(sensor, pollutant));
+    }
+
+    private void cacheValues(Sensor sensor, AirPollutionRecord record) {
+        for (PollutantType supportedPollutant : getSupportedPollutants()) {
+            double value = getPollutantLevel(supportedPollutant, record);
+            APIMeasurement measurement = APIMeasurement.of(supportedPollutant, Date.from(Instant.now(Clock.systemUTC())), value);
+            cacheValue(sensor, supportedPollutant, measurement);
+        }
     }
 
     private double getPollutantLevel(PollutantType pollutant, AirPollutionRecord record) {

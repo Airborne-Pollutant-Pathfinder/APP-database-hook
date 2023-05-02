@@ -11,5 +11,7 @@ public interface APIRepository {
 
     Collection<APIAdapter> getAdapters(PollutantType pollutant);
 
+    void clearCachedAdapters();
+
     Collection<PollutantType> getSupportedPollutants();
 }

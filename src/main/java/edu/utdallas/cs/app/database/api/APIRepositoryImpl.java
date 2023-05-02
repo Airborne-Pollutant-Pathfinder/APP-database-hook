@@ -19,6 +19,15 @@ public final class APIRepositoryImpl implements APIRepository {
     }
 
     @Override
+    public void clearCachedAdapters() {
+        apiClientsForPollutant.values().stream()
+                .flatMap(Collection::stream)
+                .filter(adapter -> adapter instanceof CachedAPIAdapter)
+                .map(adapter -> (CachedAPIAdapter) adapter)
+                .forEach(CachedAPIAdapter::clearCache);
+    }
+
+    @Override
     public Collection<PollutantType> getSupportedPollutants() {
         return apiClientsForPollutant.keySet();
     }
