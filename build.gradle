@@ -35,6 +35,9 @@ dependencies {
 
     // Guava
     implementation 'com.google.guava:guava:31.1-jre'
+
+    // OpenWeatherMap
+    implementation 'com.github.prominence:openweathermap-api:2.3.0'
 }
 
 test {

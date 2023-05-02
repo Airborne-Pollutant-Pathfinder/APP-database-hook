@@ -7,7 +7,7 @@ to attach listeners to, so they can receive updates when new data is available. 
 
 1. The database must first be loaded before running the database hook. More instructions can be found
 [here](https://github.com/Airborne-Pollutant-Pathfinder/APP-database).
-2. Add the `MINTS_BUCKET`, `MINTS_ORG`, `MINTS_TOKEN`, and `MINTS_URL` environment variables. IntelliJ has native 
+2. Add the `MINTS_BUCKET`, `MINTS_ORG`, `MINTS_TOKEN`, `MINTS_URL`, and `OPENWEATHER_TOKEN` environment variables. IntelliJ has native 
    support for this if you edit the configuration settings. More detailed information on how to add environment
    variables to your IntelliJ run configurations can be found
    [here](https://www.jetbrains.com/help/objc/add-environment-variables-and-program-arguments.html#add-environment-variables).
