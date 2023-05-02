@@ -1,49 +1,35 @@
 package edu.utdallas.cs.app.database.util;
 
 public final class ConversionUtil {
-    private static final double MOLECULAR_WEIGHT_OF_CO = 28.01;
-    private static final double MOLECULAR_WEIGHT_OF_NO2 = 46.0055;
-    private static final double MOLECULAR_WEIGHT_OF_O3 = 48.0;
-    private static final double MOLECULAR_WEIGHT_OF_SO2 = 64.06;
-    private static final double STANDARD_TEMPERATURE_IN_KELVIN = 273.15;
-    private static final double STANDARD_PRESSURE_IN_ATMOSPHERES = 1.0;
-    private static final double GAS_CONSTANT = 0.08206;
+    private static final double CO_MOLECULAR_WEIGHT = 28.01;
+    private static final double NO2_MOLECULAR_WEIGHT = 46.01;
+    private static final double O3_MOLECULAR_WEIGHT = 48.0;
+    private static final double SO2_MOLECULAR_WEIGHT = 64.07;
 
     private ConversionUtil() {
     }
 
-    public static double convertCO(double concentrationInUgPerCubicMeter) {
-        return convertUgPerCubicMeterToPpm(concentrationInUgPerCubicMeter, MOLECULAR_WEIGHT_OF_CO);
+    public static double convertCO(double concentrationUgPerCubicMeter) {
+        return ugPerCubicMeterToPpm(concentrationUgPerCubicMeter, CO_MOLECULAR_WEIGHT);
     }
 
-    public static double convertNO2(double concentrationInUgPerCubicMeter) {
-        return convertUgPerCubicMeterToPpb(concentrationInUgPerCubicMeter, MOLECULAR_WEIGHT_OF_NO2);
+    public static double convertNO2(double concentrationUgPerCubicMeter) {
+        return ugPerCubicMeterToPpb(concentrationUgPerCubicMeter, NO2_MOLECULAR_WEIGHT);
     }
 
-    public static double convertO3(double concentrationInUgPerCubicMeter) {
-        return convertUgPerCubicMeterToPpb(concentrationInUgPerCubicMeter, MOLECULAR_WEIGHT_OF_O3);
+    public static double convertO3(double concentrationUgPerCubicMeter) {
+        return ugPerCubicMeterToPpb(concentrationUgPerCubicMeter, O3_MOLECULAR_WEIGHT);
     }
 
-    public static double convertSO2(double concentrationInUgPerCubicMeter) {
-        return convertUgPerCubicMeterToPpb(concentrationInUgPerCubicMeter, MOLECULAR_WEIGHT_OF_SO2);
+    public static double convertSO2(double concentrationUgPerCubicMeter) {
+        return ugPerCubicMeterToPpb(concentrationUgPerCubicMeter, SO2_MOLECULAR_WEIGHT);
     }
 
-    private static double convertUgPerCubicMeterToPpm(double concentrationInUgPerCubicMeter, double molecularWeight) {
-        double concentrationInGramsPerCubicMeter = concentrationInUgPerCubicMeter / 1000000.0;
-        double moles = (STANDARD_PRESSURE_IN_ATMOSPHERES * 100000) * (1.0 / GAS_CONSTANT) *
-                (1.0 / STANDARD_TEMPERATURE_IN_KELVIN) * 1.0;
-        double mass = moles * molecularWeight;
-        double concentrationInPpm = (concentrationInGramsPerCubicMeter / mass) * 1000000.0;
-        return concentrationInPpm;
+    private static double ugPerCubicMeterToPpb(double concentration, double molecularWeight) {
+        return 24.45 * concentration / molecularWeight;
     }
 
-    private static double convertUgPerCubicMeterToPpb(double concentrationInUgPerCubicMeter, double molecularWeight) {
-        double concentrationInGramsPerCubicMeter = concentrationInUgPerCubicMeter / 1000000.0;
-        double moles = (STANDARD_PRESSURE_IN_ATMOSPHERES * 100000) * (1.0 / GAS_CONSTANT) *
-                (1.0 / STANDARD_TEMPERATURE_IN_KELVIN) * 1.0;
-        double volumeOfAir = 22.4;
-        double mass = moles * molecularWeight;
-        double concentrationInPpb = (concentrationInGramsPerCubicMeter / mass) * volumeOfAir * 1000.0;
-        return concentrationInPpb;
+    private static double ugPerCubicMeterToPpm(double concentration, double molecularWeight) {
+        return ugPerCubicMeterToPpb(concentration, molecularWeight) / 1000;
     }
 }
