@@ -76,6 +76,9 @@ public final class OpenAQAdapter extends CachedAPIAdapter {
 
     private void cacheValues(Sensor sensor, OpenAQParameter[] parameters) throws ParseException {
         for (OpenAQParameter parameter : parameters) {
+            if (parameter.getPollutantType() == null) {
+                continue;
+            }
             double value = parameter.getLastValue();
             Date lastUpdated = DateUtil.createDate(formatter, parameter.getLastUpdated());
             APIMeasurement measurement = APIMeasurement.of(parameter.getPollutantType(), lastUpdated, value);
