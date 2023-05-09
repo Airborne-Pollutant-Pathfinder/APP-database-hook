@@ -35,3 +35,15 @@ eventStream.subscribe(
     () -> System.out.println("Done")
 );
 ```
+
+## Problem Troubleshooting
+
+**Q: For some weird reason, the program just pauses execution on a line in FetchDataTask.**
+
+A: There is a glitch currently where FetchDataTask does not output errors. So, if you are running the program and it
+pauses on a line in FetchDataTask, it is most likely because there is an error. To fix this, you can add a breakpoint
+on the line that it is pausing on and run the program in debug mode. This will allow you to see the line that is pausing.
+Then, you can move the code to Main.java to see the error.
+
+It's quite a bad solution really, so it might be worth looking into why errors don't output. Perhaps it's because of
+ScheduledExecutorService?
