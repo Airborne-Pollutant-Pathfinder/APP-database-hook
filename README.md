@@ -3,6 +3,12 @@
 This database hook is responsible for fetching data from 3rd party APIs. It also provides an SSE for an application
 to attach listeners to, so they can receive updates when new data is available. It uses Hibernate and Spring WebFlux.
 
+## Video
+
+Click below to see our video for the app.
+
+[![Watch the video](https://i.imgur.com/OBm9FRB.png)](https://youtu.be/z_J9tR2n-vY)
+
 ## Setup
 
 1. The database must first be loaded before running the database hook. More instructions can be found
